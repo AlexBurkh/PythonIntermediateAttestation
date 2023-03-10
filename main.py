@@ -23,7 +23,7 @@ def run(nm):
         if user_input == 1:
             print_notes(nm.get_text())
         if user_input == 2:
-            pass
+            create_note_handler(nm)
         if user_input == 3:
             pass
         if user_input == 4:
@@ -31,6 +31,11 @@ def run(nm):
         if user_input == 5:
             view.print_text("До свидания!")
             status = False          
+
+def create_note_handler(nm):
+    title = view.read_text("Введите название: ")
+    body = view.read_text("Введите содержание: ")
+    nm.add_note(title, body)
 
 def print_notes(nm):
     view.print_text(nm)

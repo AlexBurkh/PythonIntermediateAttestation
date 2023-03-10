@@ -1,4 +1,6 @@
 import json
+from os.path import exists
+from os import getcwd
 from note import note
 
 class note_manager:
@@ -9,11 +11,13 @@ class note_manager:
     def __init__(self, serialize_path):
         self._serialize_path = serialize_path
         self.import_notes(self.load_notes())
-    def __str__(self):
+    def get_text(self):
         result = ""
         if not self.is_empty():
             for note in self.get_notes():
                 result += note
+        if len(result) == 0:
+            result = "Здесь пока нет записей"
         return result 
     def is_empty(self):
         if len(self.get_notes()) == 0:
@@ -37,11 +41,15 @@ class note_manager:
         self._serialize_path = path
         
     def load_notes(self):
-        with open(self._serialize_path, 'r') as f:
-            return json.load(f)
+        if exists(self._serialize_path):
+            print(getcwd())
+            with open(f"{getcwd()}\\{self._serialize_path}") as f:
+                return json.load(f)
     def save_notes(self):
-        with open(self._serialize_path, 'w') as f:
-            json.dump(self.get_notes())
+        if exists(self._serialize_path):
+            print(getcwd())
+            with open(f"{getcwd()}\\{self._serialize_path}") as f:
+                json.dump(self.get_notes())
 
 
     def _import_note(self, n_id: int,

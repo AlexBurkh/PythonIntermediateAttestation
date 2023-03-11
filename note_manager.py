@@ -9,7 +9,11 @@ class note_manager:
     _next_id: int = 0
 
     def __init__(self, serialize_path):
-        self._serialize_path = serialize_path
+        if (serialize_path.startswith('data')):
+            self._serialize_path = getcwd() + "\\" + serialize_path
+        else:
+            self._serialize_path = serialize_path
+        print(self._serialize_path)
         self.import_notes(self.load_notes())
     def get_info(self):
         result = ""
@@ -42,11 +46,12 @@ class note_manager:
         
     def load_notes(self):
         if exists(self._serialize_path):
-            with open(f"{getcwd()}\\{self._serialize_path}") as f:
+            with open(self._serialize_path) as f:
                 return json.load(f)
     def save_notes(self):
         if exists(self._serialize_path):
-            with open(f"{getcwd()}\\{self._serialize_path}") as f:
+            print("file exists")
+            with open(self._serialize_path) as f:
                 json.dump(self.get_notes())
 
     def _import_note(self, n_id: int,

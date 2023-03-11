@@ -12,10 +12,10 @@ class note:
         self._title = title
         self._body = body
         self._created = datetime.now()
-        self._modified = self._creation_time
+        self._modified = self._created
     
-    def __str__(self):
-        return f"id: {self.get_id()} title: {self.get_title()} body: {self.get_body()} created: {self.get_created()} modified: {self.get_modified}"
+    def get_info(self):
+        return f"id: {self.get_id()} title: {self.get_title()} body: {self.get_body()} created: {self.get_created()} modified: {self.get_modified()}\n"
 
     def get_id(self):
         return self._id

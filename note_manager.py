@@ -11,11 +11,11 @@ class note_manager:
     def __init__(self, serialize_path):
         self._serialize_path = serialize_path
         self.import_notes(self.load_notes())
-    def get_text(self):
+    def get_info(self):
         result = ""
         if not self.is_empty():
             for note in self.get_notes():
-                result += note
+                result += note.get_info()
         if len(result) == 0:
             result = "Здесь пока нет записей"
         return result 
@@ -42,15 +42,12 @@ class note_manager:
         
     def load_notes(self):
         if exists(self._serialize_path):
-            print(getcwd())
             with open(f"{getcwd()}\\{self._serialize_path}") as f:
                 return json.load(f)
     def save_notes(self):
         if exists(self._serialize_path):
-            print(getcwd())
             with open(f"{getcwd()}\\{self._serialize_path}") as f:
                 json.dump(self.get_notes())
-
 
     def _import_note(self, n_id: int,
                         title: str,

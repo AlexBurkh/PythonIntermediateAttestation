@@ -13,8 +13,8 @@ class console_view:
         else:
             return input("> ")
     @staticmethod
-    def read_int():
-        res = console_view.read_text()
+    def read_int(text = None):
+        res = console_view.read_text(text)
         if res.isdigit():
             return int(res)
         else:

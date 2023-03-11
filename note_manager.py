@@ -76,7 +76,12 @@ class note_manager:
                 note(self._next_id, title, body))
             self._next_id += 1
             return True
-        return False    
+        return False   
+
+    def modify_note(self, id, title = None, body = None):
+        for note in self.get_notes():
+            if note.get_id() ==  id:
+                note.modify(title, body)
     
     def delete_note(self, id: int):
         if self.check_text(id):

@@ -4,6 +4,7 @@ import configparser
 import os
 
 main_menu_points = ["1. Вывести записи", "2. Создать запись", "3. Редактировать запись", "4. Удалить запись", "5. Выход"]
+modify_menu_points = ["1. Изменить заголовок", "2. Изменить тело", "3. Отмена"]
 exit_menu_points = ["1. Выйти и сохранить", "2. Выйти без сохранения", "3. Отмена"]
 
 
@@ -25,7 +26,7 @@ def run(nm):
         if user_input == 2:
             create_note_handler(nm)
         if user_input == 3:
-            pass
+            modify_note_handler(nm)
         if user_input == 4:
             pass
         if user_input == 5:
@@ -37,6 +38,20 @@ def create_note_handler(nm):
     title = view.read_text("Введите название")
     body = view.read_text("Введите содержание")
     nm.add_note(title, body)
+def modify_note_handler(nm):
+    id = view.read_int("Введите id записи")
+    if id is not None and id < len(nm.get_notes()) and id >= 0:
+        view.print_list(modify_menu_points)
+        point = view.read_int()
+        if point == 1:
+            new_title = view.read_text("Введите новый заголовок")
+            nm.modify_note(id, new_title)
+        if point == 2:
+            new_body = view.read_text("Введите новое тело записи")
+            nm.modify_note(id, body = new_body)
+    else:
+        view.print_text("Некорректный id записи")
+    
 def exit_handler(nm):
     view.print_text("Сохранить результат?")
     view.print_list(exit_menu_points)

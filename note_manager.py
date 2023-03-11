@@ -1,6 +1,6 @@
 import json
 from os.path import exists, abspath
-from os import getcwd
+from os import getcwd, mkdir
 from note import note
 
 class note_manager:
@@ -9,7 +9,7 @@ class note_manager:
     _next_id: int = 0
 
     def __init__(self, serialize_path):
-        self._serialize_path = serialize_path#abspath(serialize_path)
+        self._serialize_path = serialize_path
         self.load_notes()
     def get_info(self):
         result = ""
@@ -45,12 +45,13 @@ class note_manager:
             with open(self._serialize_path, 'r') as f:
                 self.import_notes(json.load(f))
     def save_notes(self):
-        if exists(self._serialize_path):
-            with open(self._serialize_path, 'w') as f:
-                res = []
-                for note in self.get_notes():
-                    res.append(note.to_dict())
-                f.write(json.dumps(res))
+        if not exists(self._serialize_path):
+            mkdir("data")
+        with open(self._serialize_path, 'w+') as f:
+            res = []
+            for note in self.get_notes():
+                res.append(note.to_dict())
+            f.write(json.dumps(res))
 
     def _import_note(self, n_id: int,
                         title: str,

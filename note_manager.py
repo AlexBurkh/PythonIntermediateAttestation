@@ -1,5 +1,5 @@
 import json
-from os.path import exists
+from os.path import exists, abspath
 from os import getcwd
 from note import note
 
@@ -9,12 +9,8 @@ class note_manager:
     _next_id: int = 0
 
     def __init__(self, serialize_path):
-        if (serialize_path.startswith('data')):
-            self._serialize_path = getcwd() + "\\" + serialize_path
-        else:
-            self._serialize_path = serialize_path
-        print(self._serialize_path)
-        self.import_notes(self.load_notes())
+        self._serialize_path = serialize_path#abspath(serialize_path)
+        self.load_notes()
     def get_info(self):
         result = ""
         if not self.is_empty():
@@ -46,29 +42,32 @@ class note_manager:
         
     def load_notes(self):
         if exists(self._serialize_path):
-            with open(self._serialize_path) as f:
-                return json.load(f)
+            with open(self._serialize_path, 'r') as f:
+                self.import_notes(json.load(f))
     def save_notes(self):
         if exists(self._serialize_path):
-            print("file exists")
-            with open(self._serialize_path) as f:
-                json.dump(self.get_notes())
+            with open(self._serialize_path, 'w') as f:
+                res = []
+                for note in self.get_notes():
+                    res.append(note.to_dict())
+                f.write(json.dumps(res))
 
     def _import_note(self, n_id: int,
                         title: str,
-                        body: str):
+                        body: str,
+                        created: str,
+                        modified: str):
         if self.check_note_data(title, body, id=n_id):
             self.get_notes().append(
-                note(n_id, title, body))
+                note(n_id, title, body, created, modified))
             self._next_id = n_id + 1
 
     def import_notes(self, notes):
-        if not self.is_empty():
-            self._notes = []
-            self._next_id = 0
-            for note in notes:
-                self._import_note(
-                    note.get_id(), note.get_title(), note.get_body())
+        self._notes = []
+        self._next_id = 0
+        for note in notes:
+            self._import_note(
+                note["id"], note["title"], note["body"], note["created"], note["modified"])
 
     def add_note(self, title: str,
                     body: str):

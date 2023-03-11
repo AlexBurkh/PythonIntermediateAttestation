@@ -9,7 +9,7 @@ class console_view:
     @staticmethod
     def read_text(text = None):
         if text is not None:
-            return input(f"{text} > ")
+            return input(f"{text}> ")
         else:
             return input("> ")
     @staticmethod

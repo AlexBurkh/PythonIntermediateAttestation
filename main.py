@@ -4,6 +4,7 @@ import configparser
 import os
 
 main_menu_points = ["1. Вывести записи", "2. Создать запись", "3. Редактировать запись", "4. Удалить запись", "5. Выход"]
+exit_menu_points = ["1. Выйти и сохранить", "2. Выйти без сохранения", "3. Отмена"]
 
 
 
@@ -16,12 +17,11 @@ def run(nm):
     status = True
 
     while(status):
-        view.print_text(nm.get_text())
         view.print_list(main_menu_points)
 
         user_input = view.read_int()
         if user_input == 1:
-            print_notes(nm.get_text())
+            print_notes_handler(nm)
         if user_input == 2:
             create_note_handler(nm)
         if user_input == 3:
@@ -29,22 +29,27 @@ def run(nm):
         if user_input == 4:
             pass
         if user_input == 5:
-            view.print_text("До свидания!")
-            status = False          
+            status = exit_handler(nm)
 
+def print_notes_handler(nm):
+    view.print_text(nm.get_info())
 def create_note_handler(nm):
-    title = view.read_text("Введите название: ")
-    body = view.read_text("Введите содержание: ")
+    title = view.read_text("Введите название")
+    body = view.read_text("Введите содержание")
     nm.add_note(title, body)
-
-def print_notes(nm):
-    view.print_text(nm)
-def create_note():
-    view.print_text("")
+def exit_handler(nm):
+    view.print_text("Сохранить результат?")
+    view.print_list(exit_menu_points)
+    user_input = view.read_int()
+    if user_input == 1:
+        nm.save_notes()
+    if user_input == 3:
+        return True
+    view.print_text("До свидания!")
+    return False
 
 if __name__ == "__main__":
     config = read_config()
-    print(os.getcwd())
     nm = note_manager(config["notes"]["SERIALIZE_PATH"])
     run(nm)
     

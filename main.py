@@ -28,7 +28,7 @@ def run(nm):
         if user_input == 3:
             modify_note_handler(nm)
         if user_input == 4:
-            pass
+            delete_note_handler(nm)
         if user_input == 5:
             status = exit_handler(nm)
 
@@ -51,7 +51,10 @@ def modify_note_handler(nm):
             nm.modify_note(id, body = new_body)
     else:
         view.print_text("Некорректный id записи")
-    
+def delete_note_handler(nm):
+    id = view.read_int("Введите id записи")
+    if id is not None and id < len(nm.get_notes()) and id >= 0:
+        nm.delete_note(id)
 def exit_handler(nm):
     view.print_text("Сохранить результат?")
     view.print_list(exit_menu_points)

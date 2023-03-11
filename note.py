@@ -7,12 +7,20 @@ class note:
     _created = None
     _modified = None
 
-    def __init__(self, id, title, body):
+    def __init__(self, id, title, body, created = None, modified = None):
         self._id = id
         self._title = title
         self._body = body
-        self._created = datetime.now()
-        self._modified = self._created
+        if created is not None:
+            self._created = created
+        else:
+            self._created = datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+        if modified is not None:
+            self._modified = modified
+        else:
+            self._modified = self._created
+    
+
     
     def get_info(self):
         return f"id: {self.get_id()} title: {self.get_title()} body: {self.get_body()} created: {self.get_created()} modified: {self.get_modified()}\n"
@@ -33,9 +41,12 @@ class note:
     def set_body(self, body):
         self._body = body
 
+    def to_dict(self):
+        return {"id":self.get_id(), "title":self.get_title(), "body":self.get_body(), "created":self.get_created(), "modified":self.get_modified()}
+
     def modify(self, title = None, body = None):
         if title != None:
             self._title = title
         if body != None:
             self._body = body
-        self._modified = datetime.now()
+        self._modified = datetime.now().strftime("%m/%d/%Y, %H:%M:%S")

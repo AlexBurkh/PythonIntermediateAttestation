@@ -45,7 +45,7 @@ class note_manager:
             with open(self._serialize_path, 'r') as f:
                 self.import_notes(json.load(f))
     def save_notes(self):
-        if not exists(self._serialize_path):
+        if not exists("data"):
             mkdir("data")
         with open(self._serialize_path, 'w+') as f:
             res = []
@@ -87,12 +87,12 @@ class note_manager:
     def delete_note(self, id: int):
         if self.check_text(id):
             flag = False
-            for note in self._notes:
+            for note in self.get_notes():
                 if note.get_id() == id:
                     self.get_notes().remove(note)
                     flag = True
             for note in self._notes[id:]:
-                note.id -= 1
+                note._id -= 1
             if not self.is_empty():
                 self._next_id = self._current_max_id() + 1
             else:
